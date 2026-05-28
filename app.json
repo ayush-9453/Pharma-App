@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PharmaCRM",
-    "slug": "PharmaCRM",
+    "slug": "pharmacrm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -39,6 +39,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fc8fc48f-346b-4bd6-8a8d-49a6fe1d6338"
+      }
+    },
+    "owner": "ayush9453"
   }
 }

@@ -1,0 +1,154 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Amlokind 5",
+      "molecule": "Amlodipine (5mg)",
+      "company": "Mankind",
+      "stock": 1420,
+      "price": 48.50,
+      "category": "Cardiac",
+      "isNewPromotion": true
+    },
+    {
+      "id": "2",
+      "name": "Ciplox 500",
+      "molecule": "Ciprofloxacin (500mg)",
+      "company": "Cipla Ltd",
+      "stock": 850,
+      "price": 92.00,
+      "category": "Antibiotic",
+      "isNewPromotion": false
+    },
+    {
+      "id": "3",
+      "name": "Rosuvas 10",
+      "molecule": "Rosuvastatin (10mg)",
+      "company": "Sun Pharma",
+      "stock": 120,
+      "price": 135.00,
+      "category": "Cardiac",
+      "isNewPromotion": true
+    },
+    {
+      "id": "4",
+      "name": "Pantocid 40",
+      "molecule": "Pantoprazole (40mg)",
+      "company": "Sun Pharma",
+      "stock": 2100,
+      "price": 74.20,
+      "category": "Gastro",
+      "isNewPromotion": false
+    },
+    {
+      "id": "5",
+      "name": "Telmikind 40",
+      "molecule": "Telmisartan (40mg)",
+      "company": "Mankind",
+      "stock": 1850,
+      "price": 62.00,
+      "category": "Cardiac",
+      "isNewPromotion": false
+    },
+    {
+      "id": "6",
+      "name": "Glimestar M1",
+      "molecule": "Glimepiride (1mg) + Metformin (500mg)",
+      "company": "Mankind",
+      "stock": 95,
+      "price": 98.40,
+      "category": "Diabetic",
+      "isNewPromotion": false
+    },
+    {
+      "id": "7",
+      "name": "Moxikind-CV 625",
+      "molecule": "Amoxicillin (500mg) + Clavulanic Acid (125mg)",
+      "company": "Mankind",
+      "stock": 640,
+      "price": 204.50,
+      "category": "Antibiotic",
+      "isNewPromotion": true
+    },
+    {
+      "id": "8",
+      "name": "Montair FX",
+      "molecule": "Montelukast (10mg) + Fexofenadine (120mg)",
+      "company": "Cipla Ltd",
+      "stock": 1100,
+      "price": 180.00,
+      "category": "Respiratory",
+      "isNewPromotion": true
+    },
+    {
+      "id": "9",
+      "name": "Novamox 500",
+      "molecule": "Amoxicillin (500mg)",
+      "company": "Cipla Ltd",
+      "stock": 150,
+      "price": 84.10,
+      "category": "Antibiotic",
+      "isNewPromotion": false
+    },
+    {
+      "id": "10",
+      "name": "Foracort 200 Inhaler",
+      "molecule": "Formoterol (6mcg) + Budesonide (200mcg)",
+      "company": "Cipla Ltd",
+      "stock": 430,
+      "price": 355.00,
+      "category": "Respiratory",
+      "isNewPromotion": false
+    },
+    {
+      "id": "11",
+      "name": "Volini Max Gel",
+      "molecule": "Diclofenac Diethylamine (2% w/w)",
+      "company": "Sun Pharma",
+      "stock": 1750,
+      "price": 145.00,
+      "category": "Analgesic",
+      "isNewPromotion": true
+    },
+    {
+      "id": "12",
+      "name": "Gemer 2",
+      "molecule": "Glimepiride (2mg) + Metformin (500mg)",
+      "company": "Sun Pharma",
+      "stock": 80,
+      "price": 112.00,
+      "category": "Diabetic",
+      "isNewPromotion": false
+    },
+    {
+      "id": "13",
+      "name": "Istamet 50/500",
+      "molecule": "Sitagliptin (50mg) + Metformin (500mg)",
+      "company": "Sun Pharma",
+      "stock": 520,
+      "price": 280.00,
+      "category": "Diabetic",
+      "isNewPromotion": true
+    },
+    {
+      "id": "14",
+      "name": "Amlokind-AT",
+      "molecule": "Amlodipine (5mg) + Atenolol (50mg)",
+      "company": "Mankind",
+      "stock": 900,
+      "price": 72.50,
+      "category": "Cardiac",
+      "isNewPromotion": false
+    },
+    {
+      "id": "15",
+      "name": "Clexane 40",
+      "molecule": "Enoxaparin (40mg/0.4ml)",
+      "company": "Cipla Ltd",
+      "stock": 240,
+      "price": 520.00,
+      "category": "Cardiac",
+      "isNewPromotion": false
+    }
+  ]
+}
