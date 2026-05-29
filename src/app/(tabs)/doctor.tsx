@@ -1,5 +1,5 @@
 import DoctorScreen from '@/screens/DoctorScreen'
 
-export default function Index() {
+export default function Doctor() {
   return <DoctorScreen />
 }

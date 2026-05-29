@@ -30,7 +30,7 @@ export default function LoginScreen() {
     }
     if (email === "abc@gmail.com" && password === "password123") {
       // Simulate successful login
-      router.push("/");
+      router.push("/doctor");
       alert("Login successful!");
     } else {
       alert("Invalid email or password.");
