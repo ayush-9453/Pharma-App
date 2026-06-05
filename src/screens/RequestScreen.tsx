@@ -40,6 +40,7 @@ export default function RequestScreen() {
     const nextId = requests.length
       ? Math.max(...requests.map((request) => request.id)) + 1
       : 1;
+    const requestedAtISO = new Date().toISOString();
     const newRequest: Request = {
       id: nextId,
       name: payload.name,
@@ -54,22 +55,44 @@ export default function RequestScreen() {
     // Optimistically add to local list and also POST to backend
     setRequests((prev) => [newRequest, ...prev]);
 
-    fetch("http://localhost:3000/requests", {
+    // Build backend payload matching server model (snake_case)
+    const backendPayload = {
+      name: payload.name,
+      molecule: payload.molecule,
+      company: payload.company,
+      product_id: (payload as any).product_id ?? null,
+      quantity: payload.quantity,
+      status: newRequest.status,
+      requested_at: requestedAtISO,
+    };
+
+    fetch("http://127.0.0.1:5000/api/requests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newRequest),
+      body: JSON.stringify(backendPayload),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to submit request");
-        return res.json().catch(() => null);
+      .then(async (res) => {
+        const text = await res.text().catch(() => "");
+        if (!res.ok) {
+          throw new Error(
+            `Failed to submit request: ${res.status} ${res.statusText} ${text}`,
+          );
+        }
+        try {
+          return JSON.parse(text);
+        } catch {
+          return null;
+        }
       })
       .catch((err) => {
         console.error("Error submitting request:", err);
+        // show user-friendly message
+        alert("Failed to submit request: " + (err?.message || err));
       });
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/requests")
+    fetch("http://127.0.0.1:5000/api/requests")
       .then((res) => res.json())
       .then((data) => setRequests(data))
       .catch((err) => console.error("Failed to load requests", err));

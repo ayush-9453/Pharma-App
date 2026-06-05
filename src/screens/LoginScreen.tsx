@@ -32,6 +32,9 @@ export default function LoginScreen() {
       // Simulate successful login
       router.push("/doctor");
       alert("Login successful!");
+    } else if (email === "admin@gmail.com" && password === "admin123") {
+      router.push("/upload");
+      alert("Admin Login");
     } else {
       alert("Invalid email or password.");
     }

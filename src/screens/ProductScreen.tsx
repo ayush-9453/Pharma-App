@@ -1,6 +1,6 @@
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -9,12 +9,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import styles from "./productstyles";
 
-// --- Comprehensive Mock Database ---
-const COMPANIES = ["All Companies", "Cipla Ltd", "Sun Pharma", "Mankind"];
+const API_BASE = "http://127.0.0.1:5000/api";
+const PRODUCT_ENDPOINT = `${API_BASE}/products`;
+
 type Product = {
   id: string;
   name: string;
@@ -25,35 +26,107 @@ type Product = {
   category: string;
   isNewPromotion: boolean;
 };
-// Product inventory will be stored in component state now (see below)
+
+const mapApiProduct = (item: any): Product => ({
+  id:
+    item.id?.toString() ||
+    item.productId?.toString() ||
+    item._id?.toString() ||
+    `${item.name ?? "product"}-${Math.random().toString(36).slice(2)}`,
+  name:
+    item.name ||
+    item.product_name ||
+    item.productName ||
+    item.title ||
+    "Unknown product",
+  molecule:
+    item.molecule ||
+    item.activeIngredient ||
+    item.active_ingredient ||
+    item.molecule_name ||
+    "Unknown molecule",
+  company:
+    item.company ||
+    item.manufacturer ||
+    item.brand ||
+    item.maker ||
+    "Unknown company",
+  stock: Number(
+    item.stock ?? item.inventory ?? item.quantity ?? item.available ?? 0,
+  ),
+  price: Number(
+    item.price ?? item.unitPrice ?? item.pts_price ?? item.price_point ?? 0,
+  ),
+  category: item.category || item.productCategory || item.type || "General",
+  isNewPromotion: Boolean(
+    item.isNewPromotion ?? item.newPromotion ?? item.promotion ?? false,
+  ),
+});
 
 export default function ProductScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("All Companies");
   const [productInventory, setProductInventory] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
-      .then((res) => res.json())
-      .then((data) => setProductInventory(data))
-      .catch((err) => console.error("Failed to load products", err));
+    setLoading(true);
+    setError(null);
+
+    fetch(PRODUCT_ENDPOINT)
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          throw new Error(
+            `Failed to load products: ${res.status} ${res.statusText} ${text}`,
+          );
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Product API returned unexpected payload.");
+        }
+        setProductInventory(data.map(mapApiProduct));
+      })
+      .catch((err) => {
+        console.error("Product fetch error", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load products.",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   // --- Dynamic Search & Filter Logic ---
-  const filteredProducts = productInventory.filter((product) => {
-    const matchesCompany =
-      selectedCompany === "All Companies" ||
-      product.company === selectedCompany;
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.molecule.toLowerCase().includes(searchQuery.toLowerCase());
+  const companies = useMemo(() => {
+    const unique = Array.from(
+      new Set(
+        productInventory.map((item) => item.company || "Unknown company"),
+      ),
+    );
+    return ["All Companies", ...unique];
+  }, [productInventory]);
 
-    return matchesCompany && matchesSearch;
-  });
+  const filteredProducts = useMemo(() => {
+    return productInventory.filter((product) => {
+      const matchesCompany =
+        selectedCompany === "All Companies" ||
+        product.company === selectedCompany;
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.molecule.toLowerCase().includes(searchQuery.toLowerCase());
 
-  // --- Promoted/New Products Filter (For Top Carousel Section) ---
-  const promotionalItems = productInventory.filter(
-    (item) => item.isNewPromotion,
+      return matchesCompany && matchesSearch;
+    });
+  }, [productInventory, searchQuery, selectedCompany]);
+
+  const promotionalItems = useMemo(
+    () => productInventory.filter((item) => item.isNewPromotion),
+    [productInventory],
   );
 
   // --- Individual Inventory Item Render Block ---
@@ -177,6 +250,17 @@ export default function ProductScreen() {
           </View>
         )}
 
+        {/* 2a. LOADING / ERROR STATE */}
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Loading products...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        ) : null}
+
         {/* 3. HORIZONTAL COMPANY FILTER SELECTOR */}
         <View style={styles.companyStickyBar}>
           <ScrollView
@@ -184,7 +268,7 @@ export default function ProductScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.filterChipWrapper}
           >
-            {COMPANIES.map((company) => {
+            {companies.map((company) => {
               const isActive = selectedCompany === company;
               return (
                 <TouchableOpacity
